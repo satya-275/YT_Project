@@ -1,8 +1,8 @@
 import { pgTable, serial, integer, boolean, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
-import { comments } from './comments';
-import { users } from './users';
+import { comments } from './comments.ts';
+import { users } from './users.ts';
 
-export const comment_likes = pgTable('comment_likes', {
+export const commentLikes = pgTable('comment_likes', {
   like_id: serial('like_id').primaryKey(),
   comment_id: integer('comment_id')
     .notNull()
