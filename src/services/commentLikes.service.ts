@@ -1,5 +1,5 @@
 import { db } from '../../configurations/db_config.ts'
-import { commentLikes } from '../../schemas/commentLikes.ts'
+import { commentLikes } from '../schemas/commentLikes.ts'
 
 export const commentLikesService = {
     getCommentLikes: async function () {

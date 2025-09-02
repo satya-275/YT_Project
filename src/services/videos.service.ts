@@ -1,5 +1,5 @@
 import { db } from '../../configurations/db_config.ts'
-import { videos } from '../../schemas/videos.ts'
+import { videos } from '../schemas/videos.ts'
 
 export const videoService = {
     getVideos: async function () {

@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '../../configurations/db_config.ts'
-import { users } from '../../schemas/users.ts'
+import { users } from '../schemas/users.ts'
 import UserInput from '../interfaces/users.interface.ts';
 
 export const userService = {
