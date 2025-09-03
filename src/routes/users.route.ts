@@ -6,7 +6,7 @@ export const usersRouter = Router({ caseSensitive: true})
 
 usersRouter.post('/add', validateUserFields({name: true, email: true}), userController.addUserDetails)
 usersRouter.get('/getusers', userController.getUsersDetails)
-usersRouter.patch('/partupdate/:email', validateUserFields({requireParamEmail: true}), userController.partialUpdateUserDetails)
+usersRouter.patch('/update/:email', validateUserFields({requireParamEmail: true}), userController.updateUserDetails)
 usersRouter.delete('/delete/:email', validateEmailParam(), userController.delUserDetails)
 
 

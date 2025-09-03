@@ -18,7 +18,7 @@ export const userController = {
             res.status(400).send(err);
         }
     },
-    partialUpdateUserDetails: async function (req: Request, res: Response) {
+    updateUserDetails: async function (req: Request, res: Response) {
         try {
             const { email } = req.params;
             const result = await userService.patchUser(email, req.body);

@@ -9,6 +9,24 @@ export const commentLikesController = {
         } catch (err) {
             res.status(400).send(err);
         }
+    },
+    
+    likeComment: async (req: Request, res: Response) => {
+        try {
+            await commentLikesService.addOrUpdateLike(req.body);
+            res.status(200).send({ message: "Like/Dislike applied successfully" });
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    },
+
+    removeLike: async (req: Request, res: Response) => {
+        try {
+            await commentLikesService.removeLike(req.body);
+            res.status(200).send({ message: "Like/Dislike removed successfully" });
+        } catch (err) {
+            res.status(400).send(err);
+        }
     }
 }
 
