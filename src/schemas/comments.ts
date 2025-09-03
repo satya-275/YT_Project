@@ -1,6 +1,7 @@
 import { pgTable, serial, integer, text, timestamp, foreignKey } from "drizzle-orm/pg-core";
 import { videos } from "./videos.ts";
 import { users } from "./users.ts";
+import { real } from "drizzle-orm/pg-core";
 
 export const comments = pgTable("comments", {
   comment_id: serial("comment_id").primaryKey(),
@@ -11,6 +12,7 @@ export const comments = pgTable("comments", {
     .notNull()
     .references(() => users.user_id),
   parent_comment_id: integer("parent_comment_id"),
+  score: real("score").default(0),
   comment_text: text("comment_text").notNull(),
   created_at: timestamp("created_at").notNull().defaultNow()
 },
