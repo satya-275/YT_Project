@@ -43,23 +43,6 @@ export const commentController = {
             res.status(400).send(err);
         }
     }
-
-
-    /* This to get over all list of comments score for a video */
-    /* getTopCommentsDetails: async function (req: Request, res: Response) {
-        try {
-            const videoIdRaw: string | ParsedQs | (string | ParsedQs)[] | undefined = req.query.videoId;
-            const limitRaw: string | ParsedQs | (string | ParsedQs)[] | undefined = req.query.limit;
-            
-            const videoId = Number(videoIdRaw);
-            const limit = Number(limitRaw);
-            
-            const result = await commentService.getTopComments(videoId, limit);
-            res.status(200).send(result);
-        } catch (err) {
-            res.status(400).send(err);
-        }
-    } */
 }
 
 

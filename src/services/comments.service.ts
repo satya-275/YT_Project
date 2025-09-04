@@ -53,16 +53,4 @@ export const commentService = {
             return err;
         }
     }
-
-
-
-    /* This to get over all list of comments score for a video */
-    /* getTopComments: async function (videoId: number, limit: number) {
-        try {
-            const result = await db.execute(sql`SELECT * FROM get_top_comments(${videoId}, ${limit})`);
-            return result.rows;
-        } catch (err) {
-            return err;
-        }
-    } */
 }
