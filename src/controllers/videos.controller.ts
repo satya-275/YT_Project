@@ -7,8 +7,9 @@ export const userController = {
             const result = await videoService.getVideos();
             res.status(200).send(result);
         } catch (err) {
-            res.status(400).send(err);
-        }
+    const error = err as Error;
+    return res.status(400).json({ error: error.message });
+}
     }
 }
 

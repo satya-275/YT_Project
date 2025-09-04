@@ -6,7 +6,7 @@ export const videoService = {
         try {
             return await db.select().from(videos);
         } catch (err) {
-            return err;
+            throw err;
         }
     }
 }

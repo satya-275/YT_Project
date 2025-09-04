@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../configurations/db_config.ts'
 import { comments } from '../schemas/comments.ts'
 import commentsInput from '../interfaces/comments.interface.ts';
-import deleteCommentsInput  from '../interfaces/deleteComments.interface.ts';
+import deleteCommentsInput from '../interfaces/deleteComments.interface.ts';
 import updateCommentsInput from '../interfaces/updateComments.interface.ts';
 
 export const commentService = {
@@ -10,13 +10,13 @@ export const commentService = {
         try {
             return await db.select().from(comments);
         } catch (err) {
-            return err;
+            throw err;
         }
     },
 
     addComment: async function (data: commentsInput) {
         try {
-            await db
+            const result = await db
                 .insert(comments)
                 .values([{
                     video_id: data.videoId,
@@ -24,33 +24,48 @@ export const commentService = {
                     comment_text: data.commentText,
                     parent_comment_id: data.parentCommentId ?? null
                 }]);
+            if (result && result.rowCount === 0) {
+                throw new Error("Comment cannot be added");
+            }
+            return result;
         } catch (err) {
-            return err;
+            throw err;
         }
     },
 
     updateComment: async function (data: updateCommentsInput) {
         const { commentId, commentText } = data;
         try {
-            await db
+            const result = await db
                 .update(comments)
                 .set({
                     comment_text: commentText
                 })
                 .where(eq(comments.comment_id, commentId));
+            if (result && result.rowCount === 0) {
+                throw new Error("Comment not found");
+            }
+            return result;
         } catch (err) {
-            return err;
+            throw err;
         }
     },
 
     deleteComment: async function (data: deleteCommentsInput) {
         const { commentId } = data;
         try {
-            await db
+            const result = await db
                 .delete(comments)
                 .where(eq(comments.comment_id, commentId));
+
+            // Postgres returns { rowCount: number }
+            if (result && result.rowCount === 0) {
+                throw new Error("Comment not found");
+            }
+
+            return result;
         } catch (err) {
-            return err;
+            throw err;
         }
     }
 }

@@ -7,7 +7,8 @@ export const commentController = {
             const result = await commentService.getComments();
             res.status(200).send(result);
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     },
 
@@ -16,7 +17,8 @@ export const commentController = {
             const result = await commentService.addComment(req.body);
             res.status(201).send(result);
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     },
 
@@ -24,13 +26,14 @@ export const commentController = {
         try {
             // Convert commentId from string (req.params) to number
             const commentId = Number(req.params.commentId);
-            
+
             // Call service layer with a typed DTO containing commentId and updated text
-            await commentService.updateComment({ commentId, commentText: req.body.commentText });  
-            
+            const pp = await commentService.updateComment({ commentId, commentText: req.body.commentText });
+
             res.status(200).send({ message: "Comment updated successfully" });
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     },
 
@@ -40,7 +43,8 @@ export const commentController = {
             await commentService.deleteComment({ commentId });
             res.status(200).send({ message: "Comment deleted successfully" });
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     }
 }

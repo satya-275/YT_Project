@@ -7,16 +7,18 @@ export const commentLikesController = {
             const result = await commentLikesService.getCommentLikes();
             res.status(200).send(result);
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     },
-    
+
     likeComment: async (req: Request, res: Response) => {
         try {
             await commentLikesService.addOrUpdateLike(req.body);
             res.status(200).send({ message: "Like/Dislike applied successfully" });
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     },
 
@@ -27,7 +29,8 @@ export const commentLikesController = {
             await commentLikesService.removeLike({ commentId, userId });
             res.status(200).send({ message: "Like/Dislike removed successfully" });
         } catch (err) {
-            res.status(400).send(err);
+            const error = err as Error;
+            return res.status(400).json({ error: error.message });
         }
     }
 }
