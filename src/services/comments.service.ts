@@ -2,6 +2,8 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../configurations/db_config.ts'
 import { comments } from '../schemas/comments.ts'
 import commentsInput from '../interfaces/comments.interface.ts';
+import deleteCommentsInput  from '../interfaces/deleteComments.interface.ts';
+import updateCommentsInput from '../interfaces/updateComments.interface.ts';
 
 export const commentService = {
     getComments: async function () {
@@ -27,12 +29,13 @@ export const commentService = {
         }
     },
 
-    updateComment: async function (commentId: number, newText: string) {
+    updateComment: async function (data: updateCommentsInput) {
+        const { commentId, commentText } = data;
         try {
             await db
                 .update(comments)
                 .set({
-                    comment_text: newText
+                    comment_text: commentText
                 })
                 .where(eq(comments.comment_id, commentId));
         } catch (err) {
@@ -40,7 +43,8 @@ export const commentService = {
         }
     },
 
-    deleteComment: async function (commentId: number) {
+    deleteComment: async function (data: deleteCommentsInput) {
+        const { commentId } = data;
         try {
             await db
                 .delete(comments)

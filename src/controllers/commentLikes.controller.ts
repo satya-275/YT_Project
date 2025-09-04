@@ -22,7 +22,9 @@ export const commentLikesController = {
 
     removeLike: async (req: Request, res: Response) => {
         try {
-            await commentLikesService.removeLike(req.body);
+            const commentId = Number(req.params.commentId);
+            const userId = Number(req.params.userId);
+            await commentLikesService.removeLike({ commentId, userId });
             res.status(200).send({ message: "Like/Dislike removed successfully" });
         } catch (err) {
             res.status(400).send(err);

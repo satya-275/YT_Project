@@ -4,5 +4,5 @@ import { commentLikesController } from '../controllers/commentLikes.controller.t
 export const commentLikesRouter = Router({ caseSensitive: true})
 
 commentLikesRouter.get('/commentlikes', commentLikesController.getCommentLikesDetails);
-commentLikesRouter.post("/commentlikes", commentLikesController.likeComment);
-commentLikesRouter.delete("/commentlikes", commentLikesController.removeLike);
+commentLikesRouter.post("/add", commentLikesController.likeComment);
+commentLikesRouter.delete("/remove/:commentId/:userId", commentLikesController.removeLike);

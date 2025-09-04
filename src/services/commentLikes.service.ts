@@ -2,6 +2,7 @@ import { and, eq } from 'drizzle-orm';
 import { db } from '../../configurations/db_config.ts'
 import { commentLikes } from '../schemas/commentLikes.ts'
 import commentLikeInput from '../interfaces/commentLikes.interface.ts';
+import deleteCommentLikeInput from '../interfaces/deleteCommentLikes.interface.ts';
 
 export const commentLikesService = {
     getCommentLikes: async function () {
@@ -28,7 +29,7 @@ export const commentLikesService = {
         // Trigger will automatically update score
     },
 
-    removeLike: async (data: commentLikeInput) => {
+    removeLike: async (data: deleteCommentLikeInput) => {
         const { commentId, userId } = data;
         await db.delete(commentLikes)
             .where(

@@ -22,10 +22,12 @@ export const commentController = {
 
     updateCommentDetails: async function (req: Request, res: Response) {
         try {
-            const { commentId } = req.params;
-            const { commentText } = req.body;
-
-            await commentService.updateComment(Number(commentId), commentText);
+            // Convert commentId from string (req.params) to number
+            const commentId = Number(req.params.commentId);
+            
+            // Call service layer with a typed DTO containing commentId and updated text
+            await commentService.updateComment({ commentId, commentText: req.body.commentText });  
+            
             res.status(200).send({ message: "Comment updated successfully" });
         } catch (err) {
             res.status(400).send(err);
@@ -34,9 +36,8 @@ export const commentController = {
 
     deleteCommentDetails: async function (req: Request, res: Response) {
         try {
-            const { commentId } = req.params;
-
-            await commentService.deleteComment(Number(commentId));
+            const commentId = Number(req.params.commentId);
+            await commentService.deleteComment({ commentId });
             res.status(200).send({ message: "Comment deleted successfully" });
         } catch (err) {
             res.status(400).send(err);
