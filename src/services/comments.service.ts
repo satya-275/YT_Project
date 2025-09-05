@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, desc, and, isNull } from 'drizzle-orm';
 import { db } from '../../configurations/db_config.ts'
 import { comments } from '../schemas/comments.ts'
 import commentsInput from '../interfaces/comments.interface.ts';
@@ -6,9 +6,38 @@ import deleteCommentsInput from '../interfaces/deleteComments.interface.ts';
 import updateCommentsInput from '../interfaces/updateComments.interface.ts';
 
 export const commentService = {
-    getComments: async function () {
+    // No interface used here since params are simple (videoId + optional parentCommentId); can add one later if more filters/pagination are needed
+    getComments: async function (videoId: number, parentCommentId?: number) {
         try {
-            return await db.select().from(comments);
+            let query;
+
+            if (parentCommentId !== undefined) {
+                // Fetch replies to a specific comment
+                query = db
+                    .select()
+                    .from(comments)
+                    .where(
+                        and(
+                            eq(comments.video_id, videoId),
+                            eq(comments.parent_comment_id, parentCommentId)
+                        )
+                    )
+                    .orderBy(desc(comments.score));
+            } else {
+                // Fetch top-level comments
+                query = db
+                    .select()
+                    .from(comments)
+                    .where(
+                        and(
+                            eq(comments.video_id, videoId),
+                            isNull(comments.parent_comment_id)
+                        )
+                    )
+                    .orderBy(desc(comments.score));
+            }
+
+            return await query;
         } catch (err) {
             throw err;
         }

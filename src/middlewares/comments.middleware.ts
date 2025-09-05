@@ -3,11 +3,13 @@ import type { Request, Response, NextFunction } from "express";
 export const validateCommentFields = (options: {
     commentIdParam?: boolean;          // if commentId must exist in params
     videoId?: boolean;                 // if videoId is required
+    videoIdParam?: boolean;            // if videoIdParam is required
     userId?: boolean;                  // if userId is required
     commentText?: boolean;             // if commentText is required
     parentCommentId?: boolean;         // if parentCommentId is required
     allowPartial?: boolean;            // for PATCH (at least one field required)
-    deleteFlag?: boolean
+    deleteFlag?: boolean               // request body will be ignored t/f
+    getFlag?: boolean                  // request body will be ignored t/f
 }) => {
     return (req: Request, res: Response, next: NextFunction) => {
         
@@ -18,8 +20,17 @@ export const validateCommentFields = (options: {
                 return res.status(400).json({ error: "Valid commentId must be provided in URL params" });
             }
         }
+
+        if (options.videoIdParam) {
+            const { videoId } = req.params;
+            if (!videoId || isNaN(Number(videoId))) {
+                return res.status(400).json({ error: "Valid videoId must be provided in URL params" });
+            }
+        }
         
-        if (options.deleteFlag) return next() // delete flag to validate commentid param without body
+        // delete flag to validate commentid param without body
+        // get flag to validate videoidparam without body
+        if (options.deleteFlag || options.getFlag) return next() 
 
         const { videoId, userId, commentText, parentCommentId } = req.body;
 

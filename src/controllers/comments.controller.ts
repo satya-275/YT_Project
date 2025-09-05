@@ -4,7 +4,10 @@ import type { Request, Response } from 'express'
 export const commentController = {
     getCommentsDetails: async function (req: Request, res: Response) {
         try {
-            const result = await commentService.getComments();
+            const parentCommentId = req.params.parentCommentId
+                ? Number(req.params.parentCommentId)
+                : undefined;
+            const result = await commentService.getComments(Number(req.params.videoId), parentCommentId);
             res.status(200).send(result);
         } catch (err) {
             const error = err as Error;
