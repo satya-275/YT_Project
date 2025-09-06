@@ -2,7 +2,9 @@ import type { Request, Response, NextFunction } from "express";
 
 export const validateCommentFields = (options: {
     commentIdParam?: boolean;          // if commentId must exist in params
+    parentCommentIdParam?: boolean;    // if parentCommentIdParam is required
     videoId?: boolean;                 // if videoId is required
+    pageNumberParam?: boolean;         // if pageNumberParam is required
     videoIdParam?: boolean;            // if videoIdParam is required
     userId?: boolean;                  // if userId is required
     commentText?: boolean;             // if commentText is required
@@ -12,7 +14,7 @@ export const validateCommentFields = (options: {
     getFlag?: boolean                  // request body will be ignored t/f
 }) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        
+
         /* 1. Param validations */
         if (options.commentIdParam) {
             const { commentId } = req.params;
@@ -27,10 +29,17 @@ export const validateCommentFields = (options: {
                 return res.status(400).json({ error: "Valid videoId must be provided in URL params" });
             }
         }
-        
+
+        if (options.parentCommentIdParam) {
+            const { parentCommentId } = req.params;
+            if (!parentCommentId || isNaN(Number(parentCommentId))) {
+                return res.status(400).json({ error: "Valid parentCommentId must be provided in URL params" });
+            }
+        }
+
         // delete flag to validate commentid param without body
         // get flag to validate videoidparam without body
-        if (options.deleteFlag || options.getFlag) return next() 
+        if (options.deleteFlag || options.getFlag) return next();
 
         const { videoId, userId, commentText, parentCommentId } = req.body;
 

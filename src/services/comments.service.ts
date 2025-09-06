@@ -7,7 +7,7 @@ import updateCommentsInput from '../interfaces/updateComments.interface.ts';
 
 export const commentService = {
     // No interface used here since params are simple (videoId + optional parentCommentId); can add one later if more filters/pagination are needed
-    getComments: async function (videoId: number, parentCommentId?: number) {
+    getComments: async function (videoId: number, pageNumber: number, parentCommentId?: number) {
         try {
             let query;
 
@@ -22,7 +22,9 @@ export const commentService = {
                             eq(comments.parent_comment_id, parentCommentId)
                         )
                     )
-                    .orderBy(desc(comments.score));
+                    .orderBy(desc(comments.score), desc(comments.created_at))
+                    .offset((pageNumber - 1) * 10)
+                    .limit(10);
             } else {
                 // Fetch top-level comments
                 query = db
@@ -34,7 +36,9 @@ export const commentService = {
                             isNull(comments.parent_comment_id)
                         )
                     )
-                    .orderBy(desc(comments.score));
+                    .orderBy(desc(comments.score), desc(comments.created_at))
+                    .offset((pageNumber - 1) * 10)
+                    .limit(10);
             }
 
             return await query;

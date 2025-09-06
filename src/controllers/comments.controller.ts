@@ -7,7 +7,7 @@ export const commentController = {
             const parentCommentId = req.params.parentCommentId
                 ? Number(req.params.parentCommentId)
                 : undefined;
-            const result = await commentService.getComments(Number(req.params.videoId), parentCommentId);
+            const result = await commentService.getComments(Number(req.params.videoId), Number(req.params.pageNumber), parentCommentId);
             res.status(200).send(result);
         } catch (err) {
             const error = err as Error;
